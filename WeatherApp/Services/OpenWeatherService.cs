@@ -21,13 +21,24 @@ namespace WeatherApp.Services
         {
             var temp = await owp.GetCurrentWeatherAsync();
 
-            var result = new TemperatureModel
+            if(temp != null)
             {
-                DateTime = DateTime.UnixEpoch.AddSeconds(temp.DateTime),
-                Temperature = temp.Main.Temperature
-            };
+                var result = new TemperatureModel
+                {
+                    DateTime = DateTime.UnixEpoch.AddSeconds(temp.DateTime),
+                    Temperature = temp.Main.Temperature
+                };
 
-            return result;
+                return result;
+
+            }
+
+            return new TemperatureModel
+            {
+                DateTime = DateTime.UnixEpoch.AddDays(1),
+                Temperature = 0
+            };
+            
         }
 
         public void SetLocation(string location)
@@ -35,9 +46,9 @@ namespace WeatherApp.Services
             owp.City = location;
         }
 
-        public void SetApiKey(string apikey)
+        public void SetApiKey(string api)
         {
-            owp.ApiKey = apikey;
+            owp.ApiKey = api;
         }
     }
 }

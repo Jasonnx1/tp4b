@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -20,6 +21,17 @@ namespace WeatherApp
             }
 
             return Configuration[key];
+        }
+
+        public static void SetValue(string key, string value)
+        {
+            if (Configuration == null)
+            {
+                initConfig();
+            }
+
+            Configuration[key] = value;
+
         }
 
         private static void initConfig()

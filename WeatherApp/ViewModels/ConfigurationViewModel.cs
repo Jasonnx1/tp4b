@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using WeatherApp.Commands;
 
 namespace WeatherApp.ViewModels
 {
     public class ConfigurationViewModel : BaseViewModel
     {
-        private string apiKey;        
+        private string apiKey;
 
         public string ApiKey { 
             get => apiKey;
@@ -32,12 +33,17 @@ namespace WeatherApp.ViewModels
         {
             /// TODO 04 : Les tâches manquantes sont dans les XAML.
             /// TODO 04a : Sauvegarder la configuration
+
+            if(obj != "")
+            {
+                AppConfiguration.SetValue("apikey", obj);
+            }
         }
 
         private string GetApiKey()
         {
             /// TODO 05 : Retourner la configuration
-            return string.Empty;
+            return AppConfiguration.GetValue("apikey");
         }
 
     }

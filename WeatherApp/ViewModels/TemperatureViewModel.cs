@@ -69,13 +69,14 @@ namespace WeatherApp.ViewModels
         }
 
         /// <summary>
-        /// TODO 12 : Valider que la clé est là
+        /// TODO 12: Valider que la clé est là
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public bool CanGetTemp(string obj)
         {
-            
+
+
             return TemperatureService != null;
         }
 
@@ -88,6 +89,7 @@ namespace WeatherApp.ViewModels
 
         private async Task GetTempAsync()
         {
+
             CurrentTemp = await TemperatureService.GetTempAsync();
 
             RawText = $"Time : {CurrentTemp.DateTime.ToLocalTime()} {Environment.NewLine}Temperature : {CurrentTemp.Temperature}";

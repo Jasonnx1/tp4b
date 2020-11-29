@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using WeatherApp.Commands;
 using WeatherApp.Services;
@@ -48,8 +50,8 @@ namespace WeatherApp.ViewModels
             ChangePageCommand = new DelegateCommand<string>(ChangePage);
            
             /// TODO 11 : Commenter cette ligne lorsque la configuration utilisateur fonctionne
-            var apiKey = AppConfiguration.GetValue("OWApiKey");
-            ows = new OpenWeatherService(apiKey);
+            /// var apiKey = AppConfiguration.GetValue("apikey");
+            /// ows = new OpenWeatherService(apiKey);
 
             initViewModels();
         }
@@ -58,16 +60,36 @@ namespace WeatherApp.ViewModels
         void initViewModels()
         {
 
+
+
+            if (AppConfiguration.GetValue("apikey") != "")
+            {
+                ows = new OpenWeatherService(AppConfiguration.GetValue("apikey"));
+            }
+            else
+            {
+                ows = new OpenWeatherService("");
+            }
+
             /// TemperatureViewModel setup
             var tvm = new TemperatureViewModel();
 
             /// TODO 09 : Indiquer qu'il n'y a aucune clé si le Settings apiKey est vide.
             /// S'il y a une valeur, instancié OpenWeatherService avec la clé
-                
+            
+            
             tvm.SetTemperatureService(ows);
             ViewModels.Add(tvm);
+            tvm.City = "Shawinigan";
+            tvm.Name = "WeatherStation";
 
-            /// TODO 01 : ConfigurationViewModel Add Configuration ViewModel
+
+            /// TODO 01 : DONE ConfigurationViewModel Add Configuration ViewModel
+            /// 
+            var cvm = new ConfigurationViewModel();
+            cvm.Name = "Preferences";
+            ViewModels.Add(cvm);
+
 
 
             CurrentViewModel = ViewModels[0];
@@ -85,6 +107,10 @@ namespace WeatherApp.ViewModels
             ///     Assigner le service de température
             /// 
            
+            if(CurrentViewModel == ViewModels[1])
+            {
+                ows.SetApiKey(AppConfiguration.GetValue("apikey"));
+            }
 
             /// Permet de retrouver le ViewModel avec le nom indiqé
             CurrentViewModel = ViewModels.FirstOrDefault(x => x.Name == pageName);  

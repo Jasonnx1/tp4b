@@ -6,5 +6,6 @@ namespace WeatherApp.ViewModels
     {
         Task<TemperatureModel> GetTempAsync();
         void SetLocation(string city);
+        void SetApiKey(string api);
     }
 }
