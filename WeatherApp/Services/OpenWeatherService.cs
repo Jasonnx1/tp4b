@@ -33,11 +33,7 @@ namespace WeatherApp.Services
 
             }
 
-            return new TemperatureModel
-            {
-                DateTime = DateTime.UnixEpoch.AddDays(1),
-                Temperature = 0
-            };
+            return null;
             
         }
 

@@ -25,6 +25,8 @@ namespace WeatherApp.ViewModels
 
         private string city;
 
+ 
+
 
         /// TODO -- : Juste pour vous voyez la nouvelle propriété ici
         /// <summary>
@@ -66,6 +68,9 @@ namespace WeatherApp.ViewModels
             Name = GetType().Name;
 
             GetTempCommand = new DelegateCommand<string>(GetTemp, CanGetTemp);
+
+            if (AppConfiguration.GetValue("apikey") == "")
+                RawText = "Initialize ApiKey in Preferences";
         }
 
         /// <summary>
@@ -75,7 +80,10 @@ namespace WeatherApp.ViewModels
         /// <returns></returns>
         public bool CanGetTemp(string obj)
         {
-
+            if(AppConfiguration.GetValue("apikey") == "")
+            {
+                return false;
+            }
 
             return TemperatureService != null;
         }
@@ -92,7 +100,16 @@ namespace WeatherApp.ViewModels
 
             CurrentTemp = await TemperatureService.GetTempAsync();
 
-            RawText = $"Time : {CurrentTemp.DateTime.ToLocalTime()} {Environment.NewLine}Temperature : {CurrentTemp.Temperature}";
+            if (CurrentTemp == null)
+            {
+                RawText = "Invalid ApiKey";
+            }
+            else
+            {
+                RawText = $"Time : {CurrentTemp.DateTime.ToLocalTime()} {Environment.NewLine}Temperature : {CurrentTemp.Temperature}";
+            }
+
+            
         }
 
         public double CelsiusInFahrenheit(double c)
